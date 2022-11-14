@@ -126,6 +126,8 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	public NewApptBook( )
 	{
 		// TODO: Implemented by student.
+		manyItems = version = 0;
+		root = null;
 		assert wellFormed() : "invariant failed at end of constructor";
 	}
 	
@@ -192,14 +194,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	
 	@Override // required
 	public Iterator<Appointment> iterator() {
-		return null; // TODO
+		MyIterator it = new MyIterator();
+		return it; // TODO
 	}
 	
 	/**
 	 * TODO
 	 */
 	public Iterator<Appointment> iterator(Appointment appt) {
-		return null; // TODO
+		if (appt == null) {
+			throw new NullPointerException();
+		}
+		MyIterator it = new MyIterator(appt);
+		return it; // TODO
 	}
 	
 	private class MyIterator implements Iterator<Appointment> {
