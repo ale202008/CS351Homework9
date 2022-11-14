@@ -136,11 +136,28 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	// you write this week.
 	
 	private Node doAdd(Node r, Appointment element) {
+		if (r == null) {
+			return new Node(element);
+		}
+		if (element.compareTo(r.data) >= 0) {
+			r.right = doAdd(r.right, element);
+		}
+		else {
+			r.left = doAdd(r.left, element);
+		}
+		
 		return r;
 	}
 	
-	public boolean add(){
+	public boolean add(Appointment element){
 		assert wellFormed() : "invariant failed at start of add";
+		
+		if (element == null) {
+			throw new IllegalArgumentException();
+		}
+		root = doAdd(root, element);
+		manyItems++;
+		version++;
 		
 		assert wellFormed() : "invariant failed at end of add";
 		return true;
@@ -151,9 +168,12 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 	}
 	
-	public boolean addAll(){
+	public boolean addAll(NewApptBook addend){
 		assert wellFormed() : "invariant failed at start of addAll";
 		
+
+		
+
 		assert wellFormed() : "invariant failed at end of addAll";
 		return true;
 	}
@@ -198,9 +218,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return it; // TODO
 	}
 	
-	/**
-	 * TODO
-	 */
+	
 	public Iterator<Appointment> iterator(Appointment appt) {
 		if (appt == null) {
 			throw new NullPointerException();
