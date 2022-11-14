@@ -40,11 +40,23 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	}
 	
 	private int manyItems;
+	private int version;
 	private Node root;
 	private Node cursor;
 
 	// TODO: Helper methods.  You are free to copy from Homework #8
 	// (your code or the solution)
+	
+	//from solution
+	private boolean checkHeight(Node r, int max) {
+		if (max < 0) {
+			return false;
+		}
+		if (r == null) {
+			return true;
+		}
+		return checkHeight(r.left, max-1) && checkHeight(r.right, max -1);
+	}
 	
 	private boolean wellFormed() {
 		// Check the invariant.
