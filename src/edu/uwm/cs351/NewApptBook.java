@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import edu.uwm.cs.junit.LockedTestCase;
+import edu.uwm.cs351.ApptBook.Node;
 
 /******************************************************************************
  * This class is a homework assignment;
@@ -37,6 +38,10 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			left = right = parent = null;
 		}
 	}
+	
+	private int manyItems;
+	private Node root;
+	private Node cursor;
 
 	// TODO: Helper methods.  You are free to copy from Homework #8
 	// (your code or the solution)
