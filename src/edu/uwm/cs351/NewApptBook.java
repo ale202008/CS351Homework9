@@ -383,7 +383,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			cursor = doNext(cursor);
-			nextCursor = cursor;
+			nextCursor = doNext(cursor);
 			
 			if (cursor == null) {
 				throw new NoSuchElementException();
