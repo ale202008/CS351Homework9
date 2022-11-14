@@ -242,6 +242,16 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return it; // TODO
 	}
 	
+	public void clear() {
+			assert wellFormed() : "invariant failed at the start of clear";
+			if (manyItems == 0) {
+				return;
+			}
+			version++;
+			manyItems = 0;
+			root = null;
+	}
+	
 	private class MyIterator implements Iterator<Appointment> {
 		// TODO data structure and wellFormed
 		// NB: don't declare as public or private
