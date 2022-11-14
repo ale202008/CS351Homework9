@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import edu.uwm.cs.junit.LockedTestCase;
-import edu.uwm.cs351.ApptBook.Node;
+
 
 /******************************************************************************
  * This class is a homework assignment;
@@ -42,7 +42,6 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	private int manyItems;
 	private int version;
 	private Node root;
-	private Node cursor;
 
 	// TODO: Helper methods.  You are free to copy from Homework #8
 	// (your code or the solution)
@@ -210,6 +209,18 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			assert wellFormed() : "invariant failed in iterator constructor";
 		}
 		// TODO: Finish the iterator class
+		
+		public Node cursor;
+		public Node nextCursor;
+		public int colVersion = version;
+		public boolean canRemove = false;
+		
+		private boolean wellFormed() {
+			
+			return true;
+		}
+		
+		
 	}
 	
 	// don't change this nested class:
