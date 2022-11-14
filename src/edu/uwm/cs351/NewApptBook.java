@@ -195,7 +195,11 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		if (r == null) {
 			return null;
 		}
-		return null;
+		Node copy = new Node(r.data);
+		copy.left = doClone(r.left, answer);
+		copy.right = doClone(r.right, answer);
+
+		return copy;
 	}
 	
 	public NewApptBook clone() {
@@ -216,7 +220,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		}
 	
 		// TODO: copy the structure (use helper method)
-		
+		answer.root = doClone(root, answer);
 	
 		assert wellFormed() : "invariant failed at end of clone";
 		assert answer.wellFormed() : "invariant on answer failed at end of clone";
@@ -259,10 +263,17 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 		private Node firstInTree(Node r) {
 			// TODO: non-recursive is fine
-			while (r.left != null) {
-				r = r.left;
+			if (r == null) {
+				return null;
 			}
-			return r;
+			
+			Node t = r;
+			
+			if (r.left != null) {
+				t = firstInTree(r.left);
+			}
+			
+			return t;
 		}
 		
 		private boolean foundCursor(Node r) {
@@ -338,13 +349,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		@Override //required
 		public boolean hasNext() {
 			assert wellFormed(): "invariant failed at the start of hasNext.";
-			return false;
+			
+			if (version != colVersion) {
+				throw new ConcurrentModificationException();
+			}
+			
+			return (cursor != null && nextCursor != null);
 		}
 
 		@Override //required
 		public Appointment next() {
 			//Checks to see if there exists an element beyond
 			assert wellFormed(): "invariant failed at the start of next";
+
 			
 				
 			assert wellFormed(): "invariant failed at the end of next";
