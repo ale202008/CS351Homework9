@@ -89,6 +89,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return allInRange(r.left, lo, r.data) && allInRange(r.right, r.data, hi);
 	}
 	
+	
 	private boolean wellFormed() {
 		// Check the invariant.
 		// Invariant: (simpler than in Homework #8
@@ -218,6 +219,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		int colVersion = version;
 		boolean canRemove = false;
 		
+		private boolean foundCursor(Node r) {
+			// TODO
+			if (cursor == r) {
+				return true;
+			}
+			
+			if (r == null && cursor != null) {
+				return false;
+			}
+
+			return foundCursor(r.left)|| foundCursor(r.right) ;
+		}
+		
 		private boolean wellFormed() {
 			
 			if (!NewApptBook.this.wellFormed()) {
@@ -229,8 +243,9 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			//Checks if cursor is in the list.
-			
-			
+			if (cursor != null && foundCursor(cursor)) {
+				return report("cursor not found in binary tree");
+			}
 			
 			return true;
 		}
