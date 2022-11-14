@@ -125,7 +125,26 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		// TODO: Implemented by student.
 		assert wellFormed() : "invariant failed at end of constructor";
 	}
-
+	
+	public boolean add(){
+		return true;
+	}
+	
+	public boolean addAll(){
+		return true;
+	}
+	
+	public int size() {
+		return manyItems;
+	}
+	
+	public NewApptBook clone() {
+		
+		return null;
+	}
+	
+	
+	
 	// other methods of the main class.
 	// You should not need to suppress *any* warnings in any code
 	// you write this week.
