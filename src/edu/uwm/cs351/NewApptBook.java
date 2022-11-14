@@ -270,8 +270,23 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			if (!foundCursor(root)) {
 				return report("cursor not in tree");
 			}
-			if (cursor != null && cursor.right != null) {
-				
+			
+			if (cursor == null) {
+				if (nextCursor != null) {
+					return report("cursor is null while nextCursor is not null");
+				}
+			}
+			else {
+				if (cursor.right != null) {
+					if (nextCursor != cursor.right && nextCursor != cursor) {
+						return report("cursor.right does not equal null and nextCursor is not equal to it");
+					}
+				}
+				if (cursor.right == null) {
+					if (nextCursor != nextInTree(root, cursor.data, false, null) && nextCursor != cursor) {
+						return report("nextCursor does not equal the next node");
+					}
+				}
 			}
 
 			return true;
