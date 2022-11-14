@@ -11,6 +11,8 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import edu.uwm.cs.junit.LockedTestCase;
+import edu.uwm.cs351.NewApptBook.Node;
+
 
 
 /******************************************************************************
@@ -206,21 +208,67 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 		MyIterator() {
 			// TODO
+			cursor = root;
 			assert wellFormed() : "invariant failed in iterator constructor";
 		}
 		// TODO: Finish the iterator class
 		
-		public Node cursor;
-		public Node nextCursor;
-		public int colVersion = version;
-		public boolean canRemove = false;
+		Node cursor;
+		Node nextCursor;
+		int colVersion = version;
+		boolean canRemove = false;
 		
 		private boolean wellFormed() {
+			
+			if (!NewApptBook.this.wellFormed()) {
+				return false;
+			}
+			
+			if (version != colVersion) {
+				return true; 
+			}
+			
+			//Checks if cursor is in the list.
+			
+			
 			
 			return true;
 		}
 		
+		@Override //required
+		public boolean hasNext() {
+			assert wellFormed(): "invariant failed at the start of hasNext.";
+			return false;
+		}
+
+		@Override //required
+		public Appointment next() {
+			//Checks to see if there exists an element beyond
+			assert wellFormed(): "invariant failed at the start of next";
+			
+				
+			assert wellFormed(): "invariant failed at the end of next";
+			
+			return cursor.data;
+		}
 		
+		/**
+		 * remove() methods that removes the current position where
+		 * cursor is.
+		 * @exception
+		 * 		if version is not equal to the colVersion, then throw exception.
+		 * 		if canRemove is false, then throw exception.
+		 */
+		public void remove() {
+			assert wellFormed(): "invariant failed at the start of remove";
+			
+			assert wellFormed(): "invariant failed at the end of remove";
+				
+		}
+		
+		public MyIterator(Appointment o) {
+			
+		}
 	}
 	
 	// don't change this nested class:
