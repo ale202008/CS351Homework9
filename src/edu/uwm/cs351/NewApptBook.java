@@ -11,7 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 import edu.uwm.cs.junit.LockedTestCase;
-import edu.uwm.cs351.NewApptBook.Node;
 
 
 
@@ -33,11 +32,10 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		Appointment data;
 		Node left;
 		Node right;
-		Node parent;
 		
 		public Node(Appointment o) {
 			data = o;
-			left = right = parent = null;
+			left = right = null;
 		}
 	}
 	
@@ -217,19 +215,18 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		Node cursor;
 		Node nextCursor;
 		int colVersion = version;
-		boolean canRemove = false;
 		
 		private boolean foundCursor(Node r) {
 			// TODO
-			if (cursor == r) {
+			if (r == cursor) {
 				return true;
 			}
-			
-			if (r == null && cursor != null) {
+
+			if (r == null) {
 				return false;
 			}
 
-			return foundCursor(r.left)|| foundCursor(r.right) ;
+			return foundCursor(r.left) || foundCursor(r.right) ;
 		}
 		
 		private boolean wellFormed() {
@@ -243,10 +240,13 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			//Checks if cursor is in the list.
-			if (cursor != null && foundCursor(cursor)) {
-				return report("cursor not found in binary tree");
+			if (!foundCursor(root) || cursor == null && nextCursor != null) {
+				return report("cursor not in tree");
 			}
+
 			
+
+
 			return true;
 		}
 		
