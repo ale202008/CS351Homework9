@@ -164,14 +164,23 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	}
 	
 	private void doAddAll(Node r) {
+		if (r == null) {
+			return;
+		}
 		
-		
+		add(r.data);
+		doAddAll(r.right);
+		doAddAll(r.left);
 	}
 	
 	public boolean addAll(NewApptBook addend){
 		assert wellFormed() : "invariant failed at start of addAll";
 		
-
+		NewApptBook addendClone = addend;
+		if (addend == this) {
+			addendClone = addend.clone();
+		}
+		doAddAll(addendClone.root);
 		
 
 		assert wellFormed() : "invariant failed at end of addAll";
@@ -183,7 +192,9 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	}
 	
 	public Node doClone(Node r, NewApptBook answer) {
-		
+		if (r == null) {
+			return null;
+		}
 		return null;
 	}
 	
