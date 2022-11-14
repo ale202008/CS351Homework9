@@ -326,34 +326,47 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				}
 			}
 			else {
-				if (cursor.right != null) {
-					Node nextChild = cursor.right;
-					while (nextChild.left != null) {
-						nextChild = nextChild.left;
-					}
-					if (nextCursor != nextChild && nextCursor != cursor) {
-						return report("cursor.right exists yet nextCursor is not equal to it or it's left children");
-					}
-				}
-				if (cursor.right == null) {
-					if (nextCursor != nextInTree(root, cursor.data, false, null) && nextCursor != cursor) {
-						return report("nextCursor does not equal the next node");
-					}
+				if (doNext(cursor) != nextCursor && nextCursor != cursor) {
+					return report("nextCursor does not equal cursor or the next node");
 				}
 			}
 
 			return true;
 		}
 		
+		private void checkVersion() {
+			if (colVersion != version) throw new ConcurrentModificationException("stale iterator");
+		}
+		
 		@Override //required
 		public boolean hasNext() {
 			assert wellFormed(): "invariant failed at the start of hasNext.";
 			
-			if (version != colVersion) {
-				throw new ConcurrentModificationException();
+			checkVersion();
+			
+			if (root != null && cursor == null) {
+				return true;
 			}
 			
 			return (cursor != null && nextCursor != null);
+		}
+		
+		private Node doNext(Node r) {
+			if (r == null) {
+				return firstInTree(root);
+			}
+			
+			if (r.right != null) {
+				r = r.right;
+				while (r.left != null) {
+					r = r.left;
+				}
+			}
+			else {
+				r = nextInTree(root, r.data, false, null);
+			}
+			
+			return r;
 		}
 
 		@Override //required
@@ -366,22 +379,15 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				throw new NoSuchElementException();
 			}
 			else {
-				if (version != colVersion) {
-					throw new ConcurrentModificationException();
-				}
+				checkVersion();
 			}
 			
-			if (cursor.right != null) {
-				Node child = cursor.right;
-				if (child.left != null) {
-					child = child.left;
-				}
-				nextCursor = nextInTree(root, cursor.data, false, null);
-			}
-			else {
-				cursor = nextInTree(root, cursor.data, false, null);
-			}
+			cursor = doNext(cursor);
+			nextCursor = cursor;
 			
+			if (cursor == null) {
+				throw new NoSuchElementException();
+			}
 			
 				
 			assert wellFormed(): "invariant failed at the end of next";
