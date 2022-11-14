@@ -3,6 +3,8 @@
 
 package edu.uwm.cs351;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -252,6 +254,17 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			root = null;
 	}
 	
+	private Node doRemove(Node r, Node c) {
+		// can change fields, but not node itself.
+		r.data = null;
+		return null;
+	}
+	
+	public void remove() {
+		MyIterator it = new MyIterator();
+		it.remove();
+	}
+	
 	private class MyIterator implements Iterator<Appointment> {
 		// TODO data structure and wellFormed
 		// NB: don't declare as public or private
@@ -405,15 +418,23 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			return cursor.data;
 		}
 		
-		/**
-		 * remove() methods that removes the current position where
-		 * cursor is.
-		 * @exception
-		 * 		if version is not equal to the colVersion, then throw exception.
-		 * 		if canRemove is false, then throw exception.
-		 */
+		
 		public void remove() {
 			assert wellFormed(): "invariant failed at the start of remove";
+			checkVersion();
+			
+			if (manyItems == 1) {
+				root = null;
+			}
+			else {
+				doRemove(root, cursor);
+			}
+			
+			cursor = nextCursor;
+			if (cursor != null) {
+				nextCursor = doNext(cursor);
+			}
+			manyItems--;
 			
 			assert wellFormed(): "invariant failed at the end of remove";
 				
