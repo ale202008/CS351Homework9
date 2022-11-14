@@ -283,8 +283,35 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 //				r.right = null;
 //			}
 //		}
+
+		if (r == c) {
+			if (r.left == null) {
+				return r.right;
+			}
+			if (r.right == null) {
+				return r.left;
+			}
+			
+			Node node = r.left;
+			while (node.right != null) {
+				node = node.right;
+			}
+			
+			node.left = r.left;
+			node.right = r.right;
+			r.left = doRemove(r.left, node);
+		}
 		
-		return null;
+		if (r != null && r.right != null) {
+			r.right = doRemove(r.right, c);
+		}
+		else if (r != null && r.left != null){
+			r.left = doRemove(r.left, c);
+		}
+		
+		
+		
+		return r;
 	}
 	
 	public void remove() {
@@ -424,6 +451,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			//Checks to see if there exists an element beyond
 			assert wellFormed(): "invariant failed at the start of next";
 
+			Appointment t = null;
 
 			if (!hasNext()) {
 				throw new NoSuchElementException();
@@ -433,16 +461,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			cursor = doNext(cursor);
-			nextCursor = doNext(cursor);
-			
-			if (cursor == null) {
-				throw new NoSuchElementException();
+			if (cursor != null) {
+				nextCursor = doNext(cursor);
+				t = cursor.data;
+			}
+			else {
+				nextCursor = null;
 			}
 			
+
 				
 			assert wellFormed(): "invariant failed at the end of next";
 			
-			return cursor.data;
+			return t;
 		}
 		
 		
@@ -450,27 +481,13 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			assert wellFormed(): "invariant failed at the start of remove";
 			checkVersion();
 			
-			if (root == cursor) {
-				if (manyItems == 1) {
-					root = null;
-				}
-				else {
-					if (root.left != null && root.right == null) {
-						root = root.left;
-					}
-					else {
-						root = root.right;
-					}
-				}
-			}
-			else {
-				doRemove(root, cursor);
-			}
+			root = doRemove(root, cursor);
 			
-			cursor = nextCursor;
 			if (manyItems > 0 && cursor == null) {
-				cursor = root;
+				cursor = firstInTree(root);
+				
 			}
+			cursor = nextCursor;
 			manyItems--;
 			
 			assert wellFormed(): "invariant failed at the end of remove";
