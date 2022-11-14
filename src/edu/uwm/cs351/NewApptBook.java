@@ -58,6 +58,36 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return checkHeight(r.left, max-1) && checkHeight(r.right, max -1);
 	}
 	
+	private int countNodes(Node r) {
+		// TODO
+		if (r == null) {
+			return 0;
+		}
+		else {
+			return 1 + countNodes(r.left) + countNodes(r.right);
+		}
+		
+	}
+	
+	private boolean allInRange(Node r, Appointment lo, Appointment hi) {
+		// TODO
+		
+		if (r == null) {
+			return true;
+		}
+		
+		if (r.data == null) {
+			return report("data was null");
+		}
+		
+		//making sure the bounds are correct
+		if (hi != null && hi.compareTo(r.data) <= 0 || lo != null && lo.compareTo(r.data) > 0) {
+			return report("not in range");
+		}
+		
+		return allInRange(r.left, lo, r.data) && allInRange(r.right, r.data, hi);
+	}
+	
 	private boolean wellFormed() {
 		// Check the invariant.
 		// Invariant: (simpler than in Homework #8
@@ -66,6 +96,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		// 3. Every node's data must not be null and be in range.
 		
 		// TODO: Use helper methods to do all the work.
+		
+		//Invariant 1
+		if (!checkHeight(root, manyItems)) {
+			return report("the tree must be bound by number of items");
+		}
+		
+		if (countNodes(root) != manyItems) {
+			return report("number of nodes does not match manyItems");
+		}
+		
+		if (!allInRange(root, null, null)) {
+			return false;
+		}
 		
 		// If no problems found, then return true:
 		return true;
