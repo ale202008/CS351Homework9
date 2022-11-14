@@ -207,14 +207,24 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 		MyIterator() {
 			// TODO
-			cursor = root;
+			cursor = firstInTree(root);
+			nextCursor = cursor;
+			colVersion = version;
 			assert wellFormed() : "invariant failed in iterator constructor";
 		}
 		// TODO: Finish the iterator class
 		
 		Node cursor;
 		Node nextCursor;
-		int colVersion = version;
+		int colVersion;
+		
+		private Node firstInTree(Node r) {
+			// TODO: non-recursive is fine
+			while (r.left != null) {
+				r = r.left;
+			}
+			return r;
+		}
 		
 		private boolean foundCursor(Node r) {
 			// TODO
@@ -229,6 +239,23 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			return foundCursor(r.left) || foundCursor(r.right) ;
 		}
 		
+		private Node nextInTree(Node r, Appointment appt, boolean acceptEquivalent, Node alt) {
+			// TODO: recursion not required, but is simpler
+			if (r == null) {
+				return alt;
+			}
+			int c = appt.compareTo(r.data);
+			
+			if (c == 0 && acceptEquivalent) {
+				return r;
+			}
+			if (c >= 0) {
+				return nextInTree(r.right, appt, acceptEquivalent, alt);
+			}
+			
+			return nextInTree(r.left, appt, acceptEquivalent, r);
+		}
+		
 		private boolean wellFormed() {
 			
 			if (!NewApptBook.this.wellFormed()) {
@@ -240,12 +267,12 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			//Checks if cursor is in the list.
-			if (!foundCursor(root) || cursor == null && nextCursor != null) {
+			if (!foundCursor(root)) {
 				return report("cursor not in tree");
 			}
-
-			
-
+			if (cursor != null && cursor.right != null) {
+				
+			}
 
 			return true;
 		}
