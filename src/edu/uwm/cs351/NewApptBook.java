@@ -126,11 +126,30 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		assert wellFormed() : "invariant failed at end of constructor";
 	}
 	
+	// other methods of the main class.
+	// You should not need to suppress *any* warnings in any code
+	// you write this week.
+	
+	private Node doAdd(Node r, Appointment element) {
+		return r;
+	}
+	
 	public boolean add(){
+		assert wellFormed() : "invariant failed at start of add";
+		
+		assert wellFormed() : "invariant failed at end of add";
 		return true;
 	}
 	
+	private void doAddAll(Node r) {
+		
+		
+	}
+	
 	public boolean addAll(){
+		assert wellFormed() : "invariant failed at start of addAll";
+		
+		assert wellFormed() : "invariant failed at end of addAll";
 		return true;
 	}
 	
@@ -138,16 +157,35 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return manyItems;
 	}
 	
-	public NewApptBook clone() {
+	public Node doClone(Node r, NewApptBook answer) {
 		
 		return null;
 	}
 	
+	public NewApptBook clone() {
+		assert wellFormed() : "invariant failed at start of clone";
+		NewApptBook answer;
 	
+		try
+		{
+			answer = (NewApptBook) super.clone( );
+		}
+		catch (CloneNotSupportedException e)
+		{  // This exception should not occur. But if it does, it would probably
+			// indicate a programming error that made super.clone unavailable.
+			// The most common error would be forgetting the "Implements Cloneable"
+			// clause at the start of this class.
+			throw new RuntimeException
+			("This class does not implement Cloneable");
+		}
 	
-	// other methods of the main class.
-	// You should not need to suppress *any* warnings in any code
-	// you write this week.
+		// TODO: copy the structure (use helper method)
+		
+	
+		assert wellFormed() : "invariant failed at end of clone";
+		assert answer.wellFormed() : "invariant on answer failed at end of clone";
+		return answer;
+	}
 	
 	@Override // required
 	public Iterator<Appointment> iterator() {
