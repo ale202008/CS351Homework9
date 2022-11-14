@@ -256,33 +256,6 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	
 	private Node doRemove(Node r, Node c) {
 		// can change fields, but not node itself.
-		
-//		if (r.left != null && r.right != null) {
-//			
-//		}
-//		else if (r.left == null && r.right == null) {
-//			
-//		}
-//		
-//		if (r.left != null && r.right == null) {
-//			if (r.left == c) {
-//				if (r.left.right != null) {
-//					Node t = r.left;
-//					while (t.right != null) {
-//						t = t.right;
-//					}
-//					r.left = t;
-//				}
-//				else {
-//					r.left = null;
-//				}
-//			}
-//		}
-//		else if (r.left == null && r.right != null) {
-//			if (r.right == c) {
-//				r.right = null;
-//			}
-//		}
 
 		if (r == c) {
 			if (r.left == null) {
@@ -329,7 +302,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			// TODO
 			cursor = nextCursor = null;
 			if (root != null) {
-				nextCursor = firstInTree(root);
+				cursor = nextCursor = firstInTree(root);
 			}
 			colVersion = version;
 			assert wellFormed() : "invariant failed in iterator constructor";
@@ -401,7 +374,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			if (cursor == null) {
-				if (nextCursor != null) {
+				if (nextCursor != cursor) {
 					return report("cursor is null while nextCursor is not null");
 				}
 			}
@@ -423,15 +396,11 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			assert wellFormed(): "invariant failed at the start of hasNext.";
 			
 			checkVersion();
-		
-			
-			return (nextCursor != null);
+	
+			return nextCursor != null;
 		}
 		
 		private Node doNext(Node r) {
-			if (r == null) {
-				return firstInTree(root);
-			}
 			
 			if (r.right != null) {
 				r = r.right;
@@ -458,8 +427,14 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				checkVersion();
 			}
 			
-			cursor = doNext(cursor);
-			nextCursor = doNext(cursor);
+			if (cursor == nextCursor) {
+				nextCursor = doNext(cursor);
+			}
+			else {
+				cursor = doNext(cursor);
+				nextCursor = doNext(cursor);
+			}
+
 			
 			assert wellFormed(): "invariant failed at the end of next";
 			
