@@ -25,6 +25,18 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		reporter.accept(error);
 		return false;
 	}
+	
+	private static class Node{
+		Appointment data;
+		Node left;
+		Node right;
+		Node parent;
+		
+		public Node(Appointment o) {
+			data = o;
+			left = right = parent = null;
+		}
+	}
 
 	// TODO: Helper methods.  You are free to copy from Homework #8
 	// (your code or the solution)
