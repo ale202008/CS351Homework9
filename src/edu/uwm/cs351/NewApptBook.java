@@ -328,6 +328,9 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		MyIterator() {
 			// TODO
 			cursor = nextCursor = null;
+			if (root != null) {
+				nextCursor = firstInTree(root);
+			}
 			colVersion = version;
 			assert wellFormed() : "invariant failed in iterator constructor";
 		}
@@ -420,12 +423,9 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			assert wellFormed(): "invariant failed at the start of hasNext.";
 			
 			checkVersion();
+		
 			
-			if (root != null && cursor == null) {
-				return true;
-			}
-			
-			return (cursor != null && nextCursor != null);
+			return (nextCursor != null);
 		}
 		
 		private Node doNext(Node r) {
@@ -451,8 +451,6 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			//Checks to see if there exists an element beyond
 			assert wellFormed(): "invariant failed at the start of next";
 
-			Appointment t = null;
-
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
@@ -461,19 +459,11 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			
 			cursor = doNext(cursor);
-			if (cursor != null) {
-				nextCursor = doNext(cursor);
-				t = cursor.data;
-			}
-			else {
-				nextCursor = null;
-			}
+			nextCursor = doNext(cursor);
 			
-
-				
 			assert wellFormed(): "invariant failed at the end of next";
 			
-			return t;
+			return cursor.data;
 		}
 		
 		
@@ -483,12 +473,10 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			
 			root = doRemove(root, cursor);
 			
-			if (manyItems > 0 && cursor == null) {
-				cursor = firstInTree(root);
-				
-			}
 			cursor = nextCursor;
 			manyItems--;
+			colVersion++;
+			version = colVersion;
 			
 			assert wellFormed(): "invariant failed at the end of remove";
 				
