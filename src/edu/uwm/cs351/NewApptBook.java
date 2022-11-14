@@ -256,7 +256,34 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 	
 	private Node doRemove(Node r, Node c) {
 		// can change fields, but not node itself.
-		r.data = null;
+		
+//		if (r.left != null && r.right != null) {
+//			
+//		}
+//		else if (r.left == null && r.right == null) {
+//			
+//		}
+//		
+//		if (r.left != null && r.right == null) {
+//			if (r.left == c) {
+//				if (r.left.right != null) {
+//					Node t = r.left;
+//					while (t.right != null) {
+//						t = t.right;
+//					}
+//					r.left = t;
+//				}
+//				else {
+//					r.left = null;
+//				}
+//			}
+//		}
+//		else if (r.left == null && r.right != null) {
+//			if (r.right == c) {
+//				r.right = null;
+//			}
+//		}
+		
 		return null;
 	}
 	
@@ -423,16 +450,26 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			assert wellFormed(): "invariant failed at the start of remove";
 			checkVersion();
 			
-			if (manyItems == 1) {
-				root = null;
+			if (root == cursor) {
+				if (manyItems == 1) {
+					root = null;
+				}
+				else {
+					if (root.left != null && root.right == null) {
+						root = root.left;
+					}
+					else {
+						root = root.right;
+					}
+				}
 			}
 			else {
 				doRemove(root, cursor);
 			}
 			
 			cursor = nextCursor;
-			if (cursor != null) {
-				nextCursor = doNext(cursor);
+			if (manyItems > 0 && cursor == null) {
+				cursor = root;
 			}
 			manyItems--;
 			
