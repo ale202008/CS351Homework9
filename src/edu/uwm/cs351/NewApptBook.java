@@ -283,7 +283,6 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		}
 		
 		
-		
 		return r;
 	}
 	
@@ -444,7 +443,12 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 		public void remove() {
 			assert wellFormed(): "invariant failed at the start of remove";
+			
 			checkVersion();
+			
+			if (cursor == nextCursor) {
+				throw new IllegalStateException();
+			}
 			
 			root = doRemove(root, cursor);
 			
