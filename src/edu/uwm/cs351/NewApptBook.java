@@ -250,8 +250,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		
 		MyIterator() {
 			// TODO
-			cursor = firstInTree(root);
-			nextCursor = cursor;
+			cursor = nextCursor = null;
 			colVersion = version;
 			assert wellFormed() : "invariant failed in iterator constructor";
 		}
@@ -362,6 +361,27 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			//Checks to see if there exists an element beyond
 			assert wellFormed(): "invariant failed at the start of next";
 
+
+			if (!hasNext()) {
+				throw new NoSuchElementException();
+			}
+			else {
+				if (version != colVersion) {
+					throw new ConcurrentModificationException();
+				}
+			}
+			
+			if (cursor.right != null) {
+				Node child = cursor.right;
+				if (child.left != null) {
+					child = child.left;
+				}
+				nextCursor = nextInTree(root, cursor.data, false, null);
+			}
+			else {
+				cursor = nextInTree(root, cursor.data, false, null);
+			}
+			
 			
 				
 			assert wellFormed(): "invariant failed at the end of next";
