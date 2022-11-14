@@ -12,7 +12,10 @@ import java.util.function.Consumer;
 
 import edu.uwm.cs.junit.LockedTestCase;
 
-
+/*
+ * Andrew Le
+ * Homework 9, CS 351
+ */
 
 /******************************************************************************
  * This class is a homework assignment;
@@ -278,8 +281,12 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			}
 			else {
 				if (cursor.right != null) {
-					if (nextCursor != cursor.right && nextCursor != cursor) {
-						return report("cursor.right does not equal null and nextCursor is not equal to it");
+					Node nextChild = cursor.right;
+					while (nextChild.left != null) {
+						nextChild = nextChild.left;
+					}
+					if (nextCursor != nextChild && nextCursor != cursor) {
+						return report("cursor.right exists yet nextCursor is not equal to it or it's left children");
 					}
 				}
 				if (cursor.right == null) {
