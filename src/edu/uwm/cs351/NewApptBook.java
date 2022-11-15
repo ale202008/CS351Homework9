@@ -265,25 +265,27 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				return r.left;
 			}
 
-			Node node = r.left;
-			
-			while (node.right != null) {
-				node = node.right;
+			Node lag = r.right;
+			Node node = r.right;
+			while (node.left != null) {
+				node = node.left;
 			}
-			
+				
+			lag.left = node.right;
 			node.left = r.left;
 			node.right = r.right;
-			r.left = doRemove(r.left, node);
-			
+			r = node;
+
+		}
+		else {
+			if (r != null && r.right != null) {
+				r.right = doRemove(r.right, c);
+			}
+			else if (r != null && r.left != null){
+				r.left = doRemove(r.left, c);
+			}
 		}
 			
-		if (r != null && r.right != null) {
-			r.right = doRemove(r.right, c);
-		}
-		else if (r != null && r.left != null){
-			r.left = doRemove(r.left, c);
-		}
-		
 		return r;
 	}
 	
@@ -487,9 +489,6 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				
 		}
 		
-		public void remove(Appointment element) {
-			
-		}
 		
 		public MyIterator(Appointment element) {
 			cursor = nextInTree(root, element, true, null);
