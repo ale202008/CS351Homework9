@@ -265,15 +265,15 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				return r.left;
 			}
 
-			Node lag = r.right;
+
 			Node node = r.right;
 			while (node.left != null) {
 				node = node.left;
 			}
-				
-			lag.left = node.right;
 			node.left = r.left;
-			node.right = r.right;
+			node.right = null;
+				
+
 			r = node;
 
 		}
