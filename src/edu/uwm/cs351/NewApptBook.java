@@ -151,6 +151,14 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return r;
 	}
 	
+	/**
+	 * method that adds a node to the tree via helper method
+	 * doAdd().
+	 * @param
+	 * 		Appointment element to add to tree
+	 * @return
+	 * 		returns true if method accessed
+	 */
 	public boolean add(Appointment element){
 		assert wellFormed() : "invariant failed at start of add";
 		
@@ -175,6 +183,14 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		doAddAll(r.left);
 	}
 	
+	/**
+	 * adds all nodes of a NewApptBook collect to this
+	 * collection
+	 * @param 
+	 * 		addend collection to add
+	 * @return
+	 * 		true if method has been accessed
+	 */
 	public boolean addAll(NewApptBook addend){
 		assert wellFormed() : "invariant failed at start of addAll";
 		
@@ -189,11 +205,15 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return true;
 	}
 	
+	/**
+	 * @returns
+	 * 		the size of the tree, manyItems
+	 */
 	public int size() {
 		return manyItems;
 	}
 	
-	public Node doClone(Node r, NewApptBook answer) {
+	private Node doClone(Node r, NewApptBook answer) {
 		if (r == null) {
 			return null;
 		}
@@ -204,6 +224,11 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return copy;
 	}
 	
+	/**
+	 * clone methods for NewApptBook
+	 * @return
+	 * 
+	 */
 	public NewApptBook clone() {
 		assert wellFormed() : "invariant failed at start of clone";
 		NewApptBook answer;
@@ -235,7 +260,13 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return it; // TODO
 	}
 	
-	
+	/**
+	 * iterator constructor given an appointment.
+	 * @param 
+	 * 		appt to initialize cursor to
+	 * @return
+	 * 		MyIterator object set at appointment
+	 */
 	public Iterator<Appointment> iterator(Appointment appt) {
 		if (appt == null) {
 			throw new NullPointerException();
@@ -244,6 +275,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return it; // TODO
 	}
 	
+	@Override // efficiency
 	public void clear() {
 			assert wellFormed() : "invariant failed at the start of clear";
 			if (manyItems == 0) {
@@ -289,9 +321,9 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return r;
 	}
 	
-	@Override 
+	@Override //efficiency
 	public boolean contains(Object element) {
-		
+		assert wellFormed() : "invariant failed in contains";
 		if (element instanceof Appointment) {
 			MyIterator it = new MyIterator();
 			Node c = it.nextInTree(root, (Appointment) element, true, null);
@@ -306,7 +338,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return false;
 	}
 	
-	@Override
+	@Override //efficiency
 	public boolean remove(Object element) {
 
 		if (!contains(element)) {
@@ -468,7 +500,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			return cursor.data;
 		}
 		
-		
+		@Override //implementation
 		public void remove() {
 			assert wellFormed(): "invariant failed at the start of remove";
 			
@@ -489,7 +521,13 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				
 		}
 		
-		
+		/**
+		 * MyIterator constructor method that takes an appointment
+		 * that starts the cursor at that appointment or the 
+		 * nearest appointment after it.
+		 * @param 
+		 * 		element to set cursor to.
+		 */
 		public MyIterator(Appointment element) {
 			cursor = nextInTree(root, element, true, null);
 			if (cursor != null) {
