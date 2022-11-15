@@ -264,29 +264,16 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			if (r.right == null) {
 				return r.left;
 			}
+
+			Node node = r.left;
 			
-			if (r.right != null) {
-				Node node = r.left;
-				
-				while (node.right != null) {
-					node = node.right;
-				}
-				
-				node.left = r.left;
-				node.right = r.right;
-				r.left = doRemove(r.left, node);
+			while (node.right != null) {
+				node = node.right;
 			}
-			else {
-				Node node = r.right;
-				
-				while (node.left != null) {
-					node = node.left;
-				}
-				
-				node.left = r.left;
-				node.right = r.right;
-				r.right = doRemove(r.right, node);
-			}
+			
+			node.left = r.left;
+			node.right = r.right;
+			r.left = doRemove(r.left, node);
 			
 		}
 			
@@ -300,13 +287,34 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		return r;
 	}
 	
-	
-
+	@Override 
+	public boolean contains(Object element) {
+		
+		if (element instanceof Appointment) {
+			MyIterator it = new MyIterator();
+			Node c = it.nextInTree(root, (Appointment) element, true, null);
+			if (c != null && c.data == element) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		return false;
+	}
 	
 	@Override
 	public boolean remove(Object element) {
-		Node c = iterator((Appointment) element).nextInTree(root, (Appointment) element, true, null);
-		
+
+		if (!contains(element)) {
+			return false;
+		}
+		else {
+			MyIterator it = new MyIterator((Appointment) element);
+			it.remove();
+			return true;
+		}
 	}
 	
 	private class MyIterator implements Iterator<Appointment> {
