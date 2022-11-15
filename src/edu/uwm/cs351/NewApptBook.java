@@ -155,7 +155,7 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 		assert wellFormed() : "invariant failed at start of add";
 		
 		if (element == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		}
 		root = doAdd(root, element);
 		manyItems++;
@@ -265,16 +265,31 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				return r.left;
 			}
 			
-			Node node = r.left;
-			while (node.right != null) {
-				node = node.right;
+			if (r.right != null) {
+				Node node = r.left;
+				
+				while (node.right != null) {
+					node = node.right;
+				}
+				
+				node.left = r.left;
+				node.right = r.right;
+				r.left = doRemove(r.left, node);
+			}
+			else {
+				Node node = r.right;
+				
+				while (node.left != null) {
+					node = node.left;
+				}
+				
+				node.left = r.left;
+				node.right = r.right;
+				r.right = doRemove(r.right, node);
 			}
 			
-			node.left = r.left;
-			node.right = r.right;
-			r.left = doRemove(r.left, node);
 		}
-		
+			
 		if (r != null && r.right != null) {
 			r.right = doRemove(r.right, c);
 		}
@@ -282,13 +297,16 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 			r.left = doRemove(r.left, c);
 		}
 		
-		
 		return r;
 	}
 	
-	public void remove() {
-		MyIterator it = new MyIterator();
-		it.remove();
+	
+
+	
+	@Override
+	public boolean remove(Object element) {
+		Node c = iterator((Appointment) element).nextInTree(root, (Appointment) element, true, null);
+		
 	}
 	
 	private class MyIterator implements Iterator<Appointment> {
@@ -461,8 +479,19 @@ public class NewApptBook extends AbstractCollection<Appointment> implements Clon
 				
 		}
 		
-		public MyIterator(Appointment o) {
+		public void remove(Appointment element) {
 			
+		}
+		
+		public MyIterator(Appointment element) {
+			cursor = nextInTree(root, element, true, null);
+			if (cursor != null) {
+				nextCursor = doNext(cursor);
+			}
+			else {
+				nextCursor = cursor;
+			}
+			colVersion = version;
 		}
 	}
 	
